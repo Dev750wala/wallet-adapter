@@ -15,10 +15,10 @@ import Airdrop from "./components/Airdrop";
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 import "./App.css";
+import { SignMessage } from "./components/SignMessage";
+import SendSol from "./components/SendSol";
 
 function App() {
-  
-
   return (
     <ConnectionProvider
       endpoint={
@@ -27,11 +27,15 @@ function App() {
     >
       <WalletProvider wallets={[]} autoConnect>
         <WalletModalProvider>
-          <WalletMultiButton style={{ margin: "10px" }} />
-          <WalletDisconnectButton style={{ margin: "10px" }} />
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <WalletMultiButton style={{ margin: "10px", borderRadius: "25px" }} />
+            <WalletDisconnectButton style={{ margin: "10px", borderRadius: "25px" }} />
+          </div>
           {/* Your app's components go here, nested within the context providers. */}
 
-          <Airdrop />
+          <Airdrop /><br /><br /><br />
+          <SignMessage /><br /><br /><br />
+          <SendSol />
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>

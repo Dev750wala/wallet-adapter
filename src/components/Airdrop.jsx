@@ -1,9 +1,25 @@
 import React from "react";
 import { useWallet, useConnection } from "@solana/wallet-adapter-react";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
 const Airdrop = () => {
   const wallet = useWallet();
+  const [balance, setBalance] = React.useState(0);
   const { connection } = useConnection();
+
+  if (!wallet.connected) {
+    return (
+      <div>
+        <p>Connect your wallet to request an airdrop.</p>
+      </div>
+    );
+  }
+
+  if (wallet.connected && wallet.publicKey) {
+	connection.getBalance(wallet.publicKey).then((balance) => {
+	  setBalance(balance / LAMPORTS_PER_SOL);
+	});
+  }
 
   const requestAirdrop = async () => {
     if (!wallet.connected || !wallet.publicKey) {
@@ -22,8 +38,8 @@ const Airdrop = () => {
 
     // Convert SOL to lamports (1 SOL = 1e9 lamports)
     const lamports = Math.round(amount * 1e9);
-    const balance = await connection.getBalance(wallet.publicKey);
-    console.log(`Wallet balance: ${balance / 1e9} SOL`);
+    // const balance = await connection.getBalance(wallet.publicKey);
+    // console.log(`Wallet balance: ${balance / 1e9} SOL`);
 
     try {
       const signature = await connection.requestAirdrop(
@@ -68,6 +84,7 @@ const Airdrop = () => {
       >
         Send airdrop
       </button>
+	  <p>Your balance: {balance} SOL </p>
     </div>
   );
 };
